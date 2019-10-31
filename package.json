@@ -21,5 +21,11 @@
   "bugs": {
     "url": "https://github.com/Shahraaz/Twitter-Mini/issues"
   },
-  "homepage": "https://github.com/Shahraaz/Twitter-Mini#readme"
+  "homepage": "https://github.com/Shahraaz/Twitter-Mini#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "nodemon": "^1.19.4"
+  }
 }
