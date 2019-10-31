@@ -1,0 +1,25 @@
+{
+  "name": "twitter",
+  "version": "1.0.0",
+  "description": "Twitter like web app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shahraaz/Twitter-Mini.git"
+  },
+  "keywords": [
+    "Twitter",
+    "Web-app",
+    "JavaScript",
+    "Mysql"
+  ],
+  "author": "Mohammed Shahraaz Hussain",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shahraaz/Twitter-Mini/issues"
+  },
+  "homepage": "https://github.com/Shahraaz/Twitter-Mini#readme"
+}
