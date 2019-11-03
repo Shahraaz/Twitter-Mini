@@ -2,6 +2,10 @@
 <h1>Feed</h1>
 
 <hr>
+    <%for(var  i=0;i<tweets.length;++i){%>
+        <p><%=tweets[i].TweetContent%></p>
+        <hr>
+    <%}%>
 
 <form class="form-horizontal" action='/searchPerson' method="POST">
     <div class="form-group ">

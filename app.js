@@ -120,8 +120,32 @@ app.get('/SignUp', function (req, res) {
 });
 
 app.get('/', function (req, res) {
-    if (req.isAuthenticated())
-        res.render('home');
+    if (req.isAuthenticated()) {
+        if (req.user.user_id) {
+            $userId = req.user.user_id
+        } else {
+            //else look for the id in the req.session.passport.user
+            $userId = req.session.passport.user
+        }
+        console.log("making feed of ", $userId);
+        var sql = "SELECT TweetContent FROM TWEET WHERE userName = ? order by tweetTime desc";
+        var values = [
+            [$userId]
+        ];
+        con.query(sql, [values], function (err, result) {
+            if (err) {
+                console.log(err);
+                res.redirect("/login");
+            }
+            else {
+                // if theres no data or result returns as 0 cancel auth
+                console.log(result);
+                res.render("home", {
+                    tweets: result
+                });
+            }
+        });
+    }
     else
         res.redirect('SignUp');
 });
@@ -239,7 +263,7 @@ app.post('/addTweet', function (req, res) {
         console.log($userId, "userId");
         var sql = "INSERT INTO TWEET (tweetContent, userName) VALUES ?";
         var values = [
-            [tweet,$userId]
+            [tweet, $userId]
         ];
         con.query(sql, [values], function (err, result) {
             if (err) {
@@ -254,6 +278,12 @@ app.post('/addTweet', function (req, res) {
     }
     else res.redirect("login");
 });
+
+app.get("/logout", (req, res, next) => {
+    req.logout();
+    res.redirect("/login");
+});
+
 
 app.listen(3000, function () {
     console.log("Server started on port 3000");
