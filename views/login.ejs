@@ -1,158 +1,34 @@
-<!DOCTYPE html>
-<html lang="en" data-scribe-reduced-action-queue="true">
+<%- include("header") -%>
+<div style="height:10px">
+    
+</div>    
+<div class="row">
+	<div class="col-sm-12">
+		<form class="form-horizontal" action='/login' method="POST">
+			<div class="form-group ">
+				<label class="control-label col-sm-2" for="id">Email</label>
+				<div class="col-sm-3">
+					<input type="id" class="form-control" id="email"
+						   name="email" required/>
+					<span class="error"></span>
+				</div>
+			</div>
 
-<head>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="id">password</label>
+				<div class="col-sm-3">
+					<input type="password" class="form-control" id="password"
+						   name="password" required/>
+					<span class="error"></span>
+				</div>
+			</div>
 
-
-
-
-
-
-
-    <meta charset="utf-8">
-    <script nonce="qtyyFVtJXtVIQSwydL/p3g==">
-        !function () { window.initErrorstack || (window.initErrorstack = []), window.onerror = function (r, i, n, o, t) { r.indexOf("Script error.") > -1 || window.initErrorstack.push({ errorMsg: r, url: i, lineNumber: n, column: o, errorObj: t }) } }();
-    </script>
-
-
-
-    <script id="bouncer_terminate_iframe" nonce="qtyyFVtJXtVIQSwydL/p3g==">
-        if (window.top != window) {
-            window.top.postMessage({ 'bouncer': true, 'event': 'complete' }, '*');
-        }
-    </script>
-    <script id="ttft_boot_data" nonce="qtyyFVtJXtVIQSwydL/p3g==">
-        window.ttftData = { "transaction_id": "0014f1960087c139.6909711d8b0f49eb\u003c:00ebee3c003f6fa4", "server_request_start_time": 1572539487700, "user_id": null, "is_ssl": true, "rendered_on_server": true, "is_tfe": true, "client": "macaw-swift", "tfe_version": "tsa_k\/1.0.1\/20190918.2229.d168947", "ttft_browser": "mozilla" }; !function () { function t(t, n) { window.ttftData && !window.ttftData[t] && (window.ttftData[t] = n) } function n() { return o ? Math.round(w.now() + w.timing.navigationStart) : (new Date).getTime() } var w = window.performance, o = w && w.now; window.ttft || (window.ttft = {}), window.ttft.recordMilestone || (window.ttft.recordMilestone = t), window.ttft.now || (window.ttft.now = n) }();
-    </script>
-    <script id="swift_action_queue" nonce="qtyyFVtJXtVIQSwydL/p3g==">
-        !function () { function e(e) { if (e || (e = window.event), !e) return !1; if (e.timestamp = (new Date).getTime(), !e.target && e.srcElement && (e.target = e.srcElement), document.documentElement.getAttribute("data-scribe-reduced-action-queue")) for (var t = e.target; t && t != document.body;) { if ("A" == t.tagName) return; t = t.parentNode } return i("all", o(e)), a(e) ? (document.addEventListener || (e = o(e)), e.preventDefault = e.stopPropagation = e.stopImmediatePropagation = function () { }, y ? (v.push(e), i("captured", e)) : i("ignored", e), !1) : (i("direct", e), !0) } function t(e) { n(); for (var t, r = 0; t = v[r]; r++) { var a = e(t.target), i = a.closest("a")[0]; if ("click" == t.type && i) { var o = e.data(i, "events"), u = o && o.click, c = !i.hostname.match(g) || !i.href.match(/#$/); if (!u && c) { window.location = i.href; continue } } a.trigger(e.event.fix(t)) } window.swiftActionQueue.wasFlushed = !0 } function r() { for (var e in b) if ("all" != e) for (var t = b[e], r = 0; r < t.length; r++)console.log("actionQueue", c(t[r])) } function n() { clearTimeout(w); for (var e, t = 0; e = h[t]; t++)document["on" + e] = null } function a(e) { if (!e.target) return !1; var t = e.target, r = (t.tagName || "").toLowerCase(); if (e.metaKey) return !1; if (e.shiftKey && "a" == r) return !1; if (t.hostname && !t.hostname.match(g)) return !1; if (e.type.match(p) && s(t)) return !1; if ("label" == r) { var n = t.getAttribute("for"); if (n) { var a = document.getElementById(n); if (a && f(a)) return !1 } else for (var i, o = 0; i = t.childNodes[o]; o++)if (f(i)) return !1 } return !0 } function i(e, t) { t.bucket = e, b[e].push(t) } function o(e) { var t = {}; for (var r in e) t[r] = e[r]; return t } function u(e) { for (; e && e != document.body;) { if ("A" == e.tagName) return e; e = e.parentNode } } function c(e) { var t = []; e.bucket && t.push("[" + e.bucket + "]"), t.push(e.type); var r, n, a = e.target, i = u(a), o = "", c = e.timestamp && e.timestamp - d; return "click" === e.type && i ? (r = i.className.trim().replace(/\s+/g, "."), n = i.id.trim(), o = /[^#]$/.test(i.href) ? " (" + i.href + ")" : "", a = '"' + i.innerText.replace(/\n+/g, " ").trim() + '"') : (r = a.className.trim().replace(/\s+/g, "."), n = a.id.trim(), a = a.tagName.toLowerCase(), e.keyCode && (a = String.fromCharCode(e.keyCode) + " : " + a)), t.push(a + o + (n && "#" + n) + (!n && r ? "." + r : "")), c && t.push(c), t.join(" ") } function f(e) { var t = (e.tagName || "").toLowerCase(); return "input" == t && "checkbox" == e.getAttribute("type") } function s(e) { var t = (e.tagName || "").toLowerCase(); return "textarea" == t || "input" == t && "text" == e.getAttribute("type") || "true" == e.getAttribute("contenteditable") } for (var m, d = (new Date).getTime(), l = 1e4, g = /^([^\.]+\.)*twitter\.com$/, p = /^key/, h = ["click", "keydown", "keypress", "keyup"], v = [], w = null, y = !0, b = { captured: [], ignored: [], direct: [], all: [] }, k = 0; m = h[k]; k++)document["on" + m] = e; w = setTimeout(function () { y = !1 }, l), window.swiftActionQueue = { buckets: b, flush: t, logActions: r, wasFlushed: !1 } }();
-    </script>
-    <script id="composition_state" nonce="qtyyFVtJXtVIQSwydL/p3g==">
-        !function () { function t(t) { t.target.setAttribute("data-in-composition", "true") } function n(t) { t.target.removeAttribute("data-in-composition") } document.addEventListener && (document.addEventListener("compositionstart", t, !1), document.addEventListener("compositionend", n, !1)) }();
-    </script>
-
-    <link rel="stylesheet" href="https://abs.twimg.com/a/1571872955/css/t1/twitter_core.bundle.css"
-        class="coreCSSBundles">
-    <link rel="stylesheet" class="moreCSSBundles"
-        href="https://abs.twimg.com/a/1571872955/css/t1/twitter_more_1.bundle.css">
-    <link rel="stylesheet" class="moreCSSBundles"
-        href="https://abs.twimg.com/a/1571872955/css/t1/twitter_more_2.bundle.css">
-
-    <link rel="dns-prefetch" href="https://pbs.twimg.com">
-    <link rel="dns-prefetch" href="https://t.co">
-    <link rel="preload" href="https://abs.twimg.com/k/en/init.en.3e84071c3bc0f0f76662.js" as="script">
-    <link rel="preload" href="https://abs.twimg.com/k/en/0.commons.en.06a750caea28350212ee.js" as="script">
-
-    <title>Login on Twitter</title>
-    <meta name="msapplication-TileImage" content="//abs.twimg.com/favicons/win8-tile-144.png" />
-    <meta name="msapplication-TileColor" content="#00aced" />
-
-
-
-    <link rel="mask-icon" sizes="any" href="https://abs.twimg.com/a/1571872955/icons/favicon.svg" color="#1da1f2">
-
-    <link rel="shortcut icon" href="//abs.twimg.com/favicons/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="https://abs.twimg.com/icons/apple-touch-icon-192x192.png" sizes="192x192">
-
-    <link rel="manifest" href="/manifest.json">
-
-    <meta name="viewport" id="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-
-    <meta name="swift-page-name" id="swift-page-name" content="login">
-    <meta name="swift-page-section" id="swift-section-name" content="login">
-
-</head>
-
-<body class="three-col logged-out" data-fouc-class-names="swift-loading no-nav-banners" dir="ltr">
-
-
-
-
-
-
-    <div id="doc"
-        data-at-shortcutkeys="{&quot;Enter&quot;:&quot;Open Tweet details&quot;,&quot;o&quot;:&quot;Expand photo&quot;,&quot;/&quot;:&quot;Search&quot;,&quot;?&quot;:&quot;This menu&quot;,&quot;j&quot;:&quot;Next Tweet&quot;,&quot;k&quot;:&quot;Previous Tweet&quot;,&quot;Space&quot;:&quot;Page down&quot;,&quot;.&quot;:&quot;Load new Tweets&quot;,&quot;gu&quot;:&quot;Go to user\u2026&quot;}"
-        class="route-login login-responsive">
-        <div class="topbar js-topbar">
-
-
-
-            <div class="global-nav global-nav--newLoggedOut" data-section-term="top_nav">
-                <div class="global-nav-inner">
-                    <div class="container">
-
-
-                        <ul class="nav js-global-actions" role="navigation" id="global-actions">
-                            <li id="global-nav-about" class="about" data-global-action="about">
-                                <a class="js-tooltip js-dynamic-tooltip" data-placement="bottom" href="/about"
-                                    target="_blank" data-component-context="about_nav" data-nav="about" rel="noopener">
-                                    <span class="Icon Icon--bird Icon--large"></span>
-                                    <span class="text">About</span>
-                                </a>
-                            </li>
-                        </ul>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <form action="/compose" method="post">
-            <div class="form-group">
-                <label for="">Title</label>
-                <input class="form-control"name="postTitle" rows="1" cols="30">        
-                <label for="">Post</label>
-                <textarea class="form-control" name="postBody" rows="5" cols="30">
-                </textarea>
-            </div>
-                <button class="btn btn-primary" type="submit" name="button" > Publish </button>
-        </form>
-
-        <div id="page-outer">
-            <div id="page-container" class="AppContent wrapper wrapper-login">
-
-                <div class="page-canvas">
-
-                    <div class="signin-wrapper" data-login-message="">
-                        <h1>Log in to Twitter</h1>
-                        <form action="/login" class="t1-form clearfix signin js-signin"
-                            method="post">
-
-                                <legend class="visuallyhidden">Log in</legend>
-
-                                <div class="clearfix field">
-                                    <input class="js-username-field email-input js-initial-focus" type="text"
-                                        name="userName" autocomplete="on" value=""
-                                        placeholder="Username" />
-                                </div>
-                                <div class="clearfix field">
-                                    <input class="js-password-field" type="text" name="password"
-                                        placeholder="Password">
-                                </div>
-
-                                <input type="hidden" value="e7b23e70a179de048bef79eb4cd4b662f7eb38ec"
-                                    name="authenticity_token" />
-
-                            <div class="captcha js-captcha">
-                            </div>
-                            <button class="btn btn-primary" type="submit" name="button" > Publish </button>
-                        </form>
-                    </div>
-
-                    <div class="clearfix mobile has-sms">
-                        <p class="signup-helper">
-                            New to Twitter?
-                            <a id="login-signup-link" href="/signup">Sign up now&#32;&raquo;</a>
-                        </p>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-</body>
-
-</html>
+			<div class="form-group">
+				<div class="col-sm-8 col-sm-offset-2">
+					<button type="submit" class="btn btn-primary" id="submit">Proceed</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<%- include("footer") -%>
