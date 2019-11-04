@@ -1,0 +1,7 @@
+<%- include("header") -%>
+<%for(var v=0;v<people.length;++v){%>
+<a href="/people/<%=people[v].USERNAME%>"> <%=people[v].NAME%></a>
+<p><%=people[v].BIO%></p>
+<hr>
+<%}%>
+<%- include("footer") -%>

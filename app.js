@@ -128,7 +128,7 @@ app.get('/', function (req, res) {
             $userId = req.session.passport.user
         }
         console.log("making feed of ", $userId);
-        var sql = "SELECT TweetContent FROM TWEET WHERE userName = ? order by tweetTime desc";
+        var sql = "SELECT TweetContent FROM TWEET, FOLLOW WHERE follower = ? and following = userName order by tweetTime desc";
         var values = [
             [$userId]
         ];
@@ -164,33 +164,51 @@ app.post('/addUser', function (req, res) {
         ;
     else
         return res.redirect('signup');
-    var sql = "INSERT INTO REGISTRATION (EMAIL, USERNAME, PASSWORD) VALUES ?";
+    var sql = 'SELECT * from REGISTRATION WHERE USERNAME = ? or EMAIL = ?';
     var values = [
-        [email, userName, password]
+        userName,
+        email
     ];
-    con.query(sql, [values], function (err, result) {
+    console.log("query=" + sql);
+    con.query(sql, values, function (err, result) {
         if (err) {
             console.log(err);
             res.redirect("/SignUp");
         }
         else {
-            console.log("Number of records inserted: " + result.affectedRows);
-            var user_id = userName;
-            console.log(user_id);
-            var sql = "INSERT INTO USERS VALUES ?";
-            var values = [
-                [userName, name, Gender, bio, 0, 0]
-            ];
-            con.query(sql, [values], function (err, result) {
-                if (err) {
-                    console.log(err);
-                    res.redirect("/Signip");
-                }
-                console.log(user_id, "Cookie");
-                req.login(user_id, () => {
-                    res.redirect("/");
+            if (result === null || result === undefined || result.length == 0) {
+                var sql = "INSERT INTO USERS VALUES ?";
+                var values = [
+                    [userName, name, Gender, bio, 0, 0]
+                ];
+                con.query(sql, [values], function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        res.redirect("/SignUp");
+                    }
+                    else {
+                        console.log("Number of records inserted: " + result.affectedRows);
+                        var user_id = userName;
+                        console.log(user_id);
+                        var sql = "INSERT INTO REGISTRATION (EMAIL, USERNAME, PASSWORD) VALUES ?";
+                        var values = [
+                            [email, userName, password]
+                        ];
+                        con.query(sql, [values], function (err, result) {
+                            if (err) {
+                                console.log(err);
+                                res.redirect("/Signip");
+                            }
+                            console.log(user_id, "Cookie");
+                            req.login(user_id, () => {
+                                res.redirect("/");
+                            });
+                        });
+                    }
                 });
-            });
+            }
+            else
+                res.redirect("/SignUp");
         }
     });
 });
@@ -239,9 +257,84 @@ app.post('/login', function (req, res) {
     });
 });
 
+app.get('/people/', function name(req, res) {
+    console.log("Here");
+    $userId = req.params.personId;
+    console.log("making feed of ", $userId);
+    var sql = "SELECT USERNAME,NAME,BIO FROM USERS order by USERNAME asc";
+    con.query(sql, function (err, result) {
+        if (err) {
+            console.log(err);
+            res.redirect("/login");
+        }
+        else {
+            // if theres no data or result returns as 0 cancel auth
+            // console.log(result);
+            res.render("people", {
+                people: result
+            });
+        }
+    });
+});
+
+
 app.get('/people/:personId', function name(req, res) {
-    console.log(req.session);
-    // console.log(currID);
+    $userId = req.params.personId;
+    console.log("making feed of ", $userId);
+    var sql = "SELECT TweetContent FROM TWEET WHERE userName = ? order by tweetTime desc";
+    var values = [
+        [$userId]
+    ];
+    con.query(sql, [values], function (err, result) {
+        if (err) {
+            console.log(err);
+            res.redirect("/");
+        }
+        else {
+            // if theres no data or result returns as 0 cancel auth
+            if (result === "" || result === null || result.length === 0)
+                res.redirect("/");
+            else {
+                // console.log(result);
+                res.render("person", {
+                    UNAME: $userId,
+                    tweets: result
+                });
+            }
+        }
+    });
+});
+
+app.post('/searchPerson', function (req, res) {
+    res.redirect('/people/' + req.body.userName);
+});
+
+app.post('/followPerson', function (req, res) {
+    if (req.user.user_id) {
+        $userId = req.user.user_id
+    } else {
+        //else look for the id in the req.session.passport.user
+        $userId = req.session.passport.user
+    }
+var follwingid = req.body.userName;
+    if(follwingid === $userId)
+        return res.redirect('/');
+    console.log("making feed of ", $userId);
+    var sql = "INSERT INTO FOLLOW (follower, following) VALUES ?";
+    var values = [
+        [$userId, follwingid]
+    ];
+con.query(sql, [values], function (err, result) {
+        if (err) {
+            console.log(err);
+            res.redirect("/");
+        }
+        else {
+            // if theres no data or result returns as 0 cancel auth
+            console.log(result);
+            res.redirect("/");
+        }
+    });
 });
 
 app.get('/makeTweet', function (req, res) {
@@ -283,7 +376,6 @@ app.get("/logout", (req, res, next) => {
     req.logout();
     res.redirect("/login");
 });
-
 
 app.listen(3000, function () {
     console.log("Server started on port 3000");
