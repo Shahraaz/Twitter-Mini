@@ -1,109 +1,32 @@
-<!DOCTYPE html>
-<html lang="en" data-scribe-reduced-action-queue="true">
+<%- include("header") -%>
+<div style="height:10px">
 
-<head>
-	<meta charset="utf-8">
-	<link rel="stylesheet" href="https://abs.twimg.com/a/1572376946/css/t1/twitter_core.bundle.css"
-		class="coreCSSBundles">
-	<link rel="stylesheet" class="moreCSSBundles"
-		href="https://abs.twimg.com/a/1572376946/css/t1/twitter_more_1.bundle.css">
-	<link rel="stylesheet" class="moreCSSBundles"
-		href="https://abs.twimg.com/a/1572376946/css/t1/twitter_more_2.bundle.css">
-	<link rel="dns-prefetch" href="https://pbs.twimg.com">
-	<link rel="dns-prefetch" href="https://t.co">
-	<link rel="preload" href="https://abs.twimg.com/k/en/init.en.a4f37390c5da4f3155b3.js" as="script">
-	<link rel="preload" href="https://abs.twimg.com/k/en/0.commons.en.06a750caea28350212ee.js" as="script">
-	<title>Login on Twitter</title>
-	<meta name="robots" content="NOODP">
-	<meta name="msapplication-TileImage" content="//abs.twimg.com/favicons/win8-tile-144.png" />
-	<meta name="msapplication-TileColor" content="#00aced" />
-	<link rel="mask-icon" sizes="any" href="https://abs.twimg.com/a/1572376946/icons/favicon.svg" color="#1da1f2">
-	<link rel="shortcut icon" href="//abs.twimg.com/favicons/favicon.ico" type="image/x-icon">
-	<link rel="apple-touch-icon" href="https://abs.twimg.com/icons/apple-touch-icon-192x192.png" sizes="192x192">
-	<meta name="viewport" id="viewport"
-		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	<meta name="swift-page-name" id="swift-page-name" content="login">
-	<meta name="swift-page-section" id="swift-section-name" content="error">
-	<link rel="canonical" href="https://twitter.com/login">
-	<link id="async-css-placeholder">
-</head>
-
-<body class="three-col logged-out" data-fouc-class-names="swift-loading no-nav-banners" dir="ltr">
-	<div id="doc"
-		data-at-shortcutkeys="{&quot;Enter&quot;:&quot;Open Tweet details&quot;,&quot;o&quot;:&quot;Expand photo&quot;,&quot;/&quot;:&quot;Search&quot;,&quot;?&quot;:&quot;This menu&quot;,&quot;j&quot;:&quot;Next Tweet&quot;,&quot;k&quot;:&quot;Previous Tweet&quot;,&quot;Space&quot;:&quot;Page down&quot;,&quot;.&quot;:&quot;Load new Tweets&quot;,&quot;gu&quot;:&quot;Go to user\u2026&quot;}"
-		class="route-login login-responsive">
-		<div id="page-outer">
-			<div id="page-container" class="AppContent wrapper wrapper-login">
-
-				<div class="page-canvas">
-
-					<div class="signin-wrapper" data-login-message="false">
-						<h1>Log in to Twitter</h1>
-						<form action="https://twitter.com/sessions" class="t1-form clearfix signin js-signin"
-							method="post">
-							<fieldset>
-
-								<legend class="visuallyhidden">Log in</legend>
-
-								<div class="clearfix field">
-									<input class="js-username-field email-input js-initial-focus" type="text"
-										name="session[username_or_email]" autocomplete="on" value=""
-										placeholder="Phone, email or username">
-								</div>
-								<div class="clearfix field">
-									<input class="js-password-field" type="password" name="session[password]"
-										placeholder="Password">
-								</div>
-
-								<input type="hidden" value="d39fedb3fcece148c3ba0519430d61515e207eb3"
-									name="authenticity_token">
-
-								<input type="hidden" name="ui_metrics" autocomplete="off"
-									value="{&quot;rf&quot;:{&quot;a60d1bfe3eef658d10996becb45ae0cc3aae22da42e976c663a378809fe6bcd8&quot;:243,&quot;a62b0eb47920d3a07eefe50d9fd032b7b553cf8d414b7d1751f6601b6971fc2c&quot;:243,&quot;d7b640ccb44826649f37721cdf026f84d8b334b5fc8f14280439648eac1eca5e&quot;:-1,&quot;a1b450e9ae580b499941e42d15b8027a3ec453aa227f54e0cf11133c52b9ffce&quot;:254},&quot;s&quot;:&quot;qNSotRmafNNGK670uSK3NSo3EMirnVTZZInYBNwmZ-24O9KV7HlVN2oxR79enMaKNoeavuFJ5AVjDdxN2aOB5WnLEkdpWYTJwg1tvsR_q0NAERhXAXnfrxWN18-w26pmqkGCC5b_O6b3pUJn_aAQDyacewU5h5sk-QbS6Gr-5k1Szq1MJGV5fJHwK17bR1mN1_GOmKdra3KDKtAwb8ufEVFPVkQjkk-zvv4RmMsF1yAEef8jCsNps1t8euo-W_kl7nkQL2ixNHuIhba0FH4Ahe0ryNEvWTg6B1mC-GH5kXdPN8UGlSqzI4OBVuPD7t07mLfPQRes-cOUrX4Tk1S9XAAAAW409NCy&quot;}">
-								<script src="/i/js_inst?c_name=ui_metrics" async=""></script>
-
-							</fieldset>
-
-							<div class="captcha js-captcha">
-							</div>
-							<div class="clearfix">
-
-								<input type="hidden" name="scribe_log">
-								<input type="hidden" name="redirect_after_login"
-									value="/?logout=1572846359419&amp;prefetchTimestamp=1572846359434">
-								<input type="hidden" value="d39fedb3fcece148c3ba0519430d61515e207eb3"
-									name="authenticity_token">
-								<button type="submit"
-									class="submit EdgeButton EdgeButton--primary EdgeButtom--medium">Log in</button>
-
-								<div class="subchck">
-									<label class="t1-label remember">
-										<input type="checkbox" value="1" name="remember_me" checked="checked">
-										Remember me
-										<span class="separator">·</span>
-										<a class="forgot" href="/account/begin_password_reset" rel="noopener">Forgot
-											password?</a>
-									</label>
-								</div>
-							</div>
-
-						</form>
-					</div>
-
-					<div class="clearfix mobile has-sms">
-						<p class="signup-helper">
-							New to Twitter?
-							<a id="login-signup-link" href="https://twitter.com/signup">Sign up now »</a>
-						</p>
-						<p class="sms-helper">
-							Already using Twitter via text message?
-							<a href="/account/complete">Activate your account »</a>
-						</p>
-					</div>
-
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<form class="form-horizontal" action='/login' method="POST">
+			<div class="form-group ">
+				<label class="control-label col-sm-2" for="id">Email</label>
+				<div class="col-sm-3">
+					<input type="id" class="form-control" id="email" name="email" required />
+					<span class="error"></span>
 				</div>
-
 			</div>
-		</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="id">password</label>
+				<div class="col-sm-3">
+					<input type="password" class="form-control" id="password" name="password" required />
+					<span class="error"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-8 col-sm-offset-2">
+					<button type="submit" class="btn btn-primary" id="submit">Proceed</button>
+				</div>
+			</div>
+		</form>
 	</div>
-</body>
+</div>
+<%- include("footer") -%>

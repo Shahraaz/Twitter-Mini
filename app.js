@@ -128,7 +128,7 @@ app.get('/', function (req, res) {
             $userId = req.session.passport.user
         }
         console.log("making feed of ", $userId);
-        var sql = "SELECT TweetContent FROM TWEET, FOLLOW WHERE follower = ? and following = userName order by tweetTime desc";
+        var sql = "SELECT userName, TweetContent FROM TWEET, FOLLOW WHERE follower = ? and following = userName order by tweetTime desc";
         var values = [
             [$userId]
         ];
@@ -138,19 +138,38 @@ app.get('/', function (req, res) {
                 res.redirect("/login");
             }
             else {
-                // if theres no data or result returns as 0 cancel auth
+                // if theres no data or result returns as 0 cancel auth4
+                var sql = "SELECT USERNAME, NAME, GENDER, BIO FROM USERS WHERE userName = ?";
+                var values = [
+                    [$userId]
+                ];
                 console.log(result);
-                res.render("home", {
-                    tweets: result
+                con.query(sql, [values], function (err, result2) {
+                    if (err) {
+                        console.log(err);
+                        res.redirect("/login");
+                    }
+                    else {
+                        console.log(result2);
+
+                        res.render("home2", {
+                            userId: result2[0].USERNAME,
+                            bio: result2[0].BIO,
+                            Gender: result2[0].GENDER,
+                            tweets: result
+                        });
+                    }
                 });
             }
         });
     }
     else
-        res.redirect('SignUp');
+        res.redirect('/login');
 });
 
 app.post('/addUser', function (req, res) {
+    if (req.isAuthenticated())
+        return res.redirect('login');
     const name = req.body.Name;
     const bio = req.body.designation;
     const email = req.body.email;
@@ -163,7 +182,7 @@ app.post('/addUser', function (req, res) {
     else if (Gender === 'M' || Gender === 'm')
         ;
     else
-        return res.redirect('signup');
+        return res.redirect('/signup');
     var sql = 'SELECT * from REGISTRATION WHERE USERNAME = ? or EMAIL = ?';
     var values = [
         userName,
@@ -173,7 +192,7 @@ app.post('/addUser', function (req, res) {
     con.query(sql, values, function (err, result) {
         if (err) {
             console.log(err);
-            res.redirect("/SignUp");
+            res.redirect("/signup");
         }
         else {
             if (result === null || result === undefined || result.length == 0) {
@@ -184,7 +203,7 @@ app.post('/addUser', function (req, res) {
                 con.query(sql, [values], function (err, result) {
                     if (err) {
                         console.log(err);
-                        res.redirect("/SignUp");
+                        res.redirect("/signup");
                     }
                     else {
                         console.log("Number of records inserted: " + result.affectedRows);
@@ -197,7 +216,7 @@ app.post('/addUser', function (req, res) {
                         con.query(sql, [values], function (err, result) {
                             if (err) {
                                 console.log(err);
-                                res.redirect("/Signip");
+                                res.redirect("/signup");
                             }
                             console.log(user_id, "Cookie");
                             req.login(user_id, () => {
@@ -208,7 +227,7 @@ app.post('/addUser', function (req, res) {
                 });
             }
             else
-                res.redirect("/SignUp");
+                res.redirect("/signup");
         }
     });
 });
@@ -258,32 +277,165 @@ app.post('/login', function (req, res) {
 });
 
 app.get('/people/', function name(req, res) {
-    console.log("Here");
-    $userId = req.params.personId;
-    console.log("making feed of ", $userId);
-    var sql = "SELECT USERNAME,NAME,BIO FROM USERS order by USERNAME asc";
-    con.query(sql, function (err, result) {
-        if (err) {
-            console.log(err);
-            res.redirect("/login");
+    if (req.isAuthenticated()) {
+        if (req.user.user_id) {
+            $userId = req.user.user_id
+        } else {
+            //else look for the id in the req.session.passport.user
+            $userId = req.session.passport.user
         }
-        else {
-            // if theres no data or result returns as 0 cancel auth
-            // console.log(result);
-            res.render("people", {
-                people: result
-            });
-        }
-    });
+        var sql = "select * from USERS where USERNAME <> ? and USERNAME  not in (select FOLLOWING from FOLLOW where FOLLOWER = ?);";
+        var values = [
+            [$userId],
+            [$userId]
+        ];
+        con.query(sql, values, function (err, result) {
+            if (err) {
+                console.log(err);
+                res.redirect("/login");
+            }
+            else {
+                // if theres no data or result returns as 0 cancel auth
+                // console.log(result);
+                res.render("people2", {
+                    people: result
+                });
+            }
+        });
+    }
+    else
+        res.redirect('/login');
 });
 
 
 app.get('/people/:personId', function name(req, res) {
+    if (!req.isAuthenticated())
+        return res.redirect('/login');
+    console.log("Debug Startr");
     $userId = req.params.personId;
     console.log("making feed of ", $userId);
-    var sql = "SELECT TweetContent FROM TWEET WHERE userName = ? order by tweetTime desc";
+    var sql = "SELECT userName, TweetContent FROM TWEET WHERE USERNAME = ? order by tweetTime desc";
     var values = [
         [$userId]
+    ];
+    con.query(sql, values, function (err, result) {
+        if (err) {
+            console.log(err);
+            res.redirect("/");
+        }
+        else {
+            console.log("people/acc" + result);
+
+            // if theres no data or result returns as 0 cancel auth
+            if (result === "" || result === null)
+                res.redirect("/");
+            else {
+                // console.log(result);
+                var sql = "SELECT * FROM USERS WHERE userName = ?";
+                var values = [
+                    [$userId]
+                ];
+                con.query(sql, [values], function (err, result2) {
+                    if (err) {
+                        console.log(err);
+                        console.log("+++++++++++++++++++++++++");
+                        res.redirect("/");
+                    }
+                    else {
+                        // if theres no data or result returns as 0 cancel auth
+                        console.log("REs2" + result2);
+                        if (result2 === "" || result2 === null || result2.length === 0)
+                            res.redirect("/");
+                        else {
+                            if (req.user.user_id) {
+                                $userId1 = req.user.user_id
+                            } else {
+                                //else look for the id in the req.session.passport.user
+                                $userId1 = req.session.passport.user
+                            }
+                            if ($userId == $userId1) {
+                                console.log(result2[0].NAME, result2[0].BIO);
+                                res.render("person3", {
+                                    USERID: $userId,
+                                    FNAME: result2[0].NAME,
+                                    BIO: result2[0].BIO,
+                                    GENDER: result2[0].GENDER,
+                                    UNAME: $userId,
+                                    tweets: result,
+                                    choice: 0
+                                });
+                            }
+                            else {
+                                var sql = "SELECT * FROM FOLLOW WHERE FOLLOWER = ? and FOLLOWING = ?";
+                                var value = [
+                                    [$userId1],
+                                    [$userId]
+                                ];
+                                console.log($userId1, $userId);
+                                con.query(sql, value, function (err, result3) {
+                                    if (err) {
+                                        console.log("||||||||||||||||||||||||");
+                                        console.log(err);
+                                        res.redirect('/');
+                                    }
+                                    else {
+                                        console.log("THIS MUST BE PRINTED");
+                                        console.log(result3);
+                                        if (result3.length === 0) {
+                                            res.render("person3", {
+                                                USERID: $userId,
+                                                FNAME: result2[0].NAME,
+                                                BIO: result2[0].BIO,
+                                                GENDER: result2[0].GENDER,
+                                                UNAME: $userId,
+                                                tweets: result,
+                                                choice: 1
+                                            });
+
+                                        }
+                                        else {
+                                            res.render("person3", {
+                                                USERID: $userId,
+                                                FNAME: result2[0].NAME,
+                                                BIO: result2[0].BIO,
+                                                GENDER: result2[0].GENDER,
+                                                UNAME: $userId,
+                                                tweets: result,
+                                                choice: 2
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    });
+    console.log("Here");
+});
+
+app.post('/searchPerson', function (req, res) {
+    res.redirect('/people/' + req.body.userName);
+});
+
+app.get('/follow/:personId', function (req, res) {
+    if (!req.isAuthenticated())
+        return res.redirect('login');
+    if (req.user.user_id) {
+        $userId = req.user.user_id
+    } else {
+        //else look for the id in the req.session.passport.user
+        $userId = req.session.passport.user
+    }
+    var follwingid = req.params.personId;
+    if (follwingid === $userId)
+        return res.redirect('/');
+    console.log("making feed of ", $userId);
+    var sql = "INSERT INTO FOLLOW (follower, following) VALUES ?";
+    var values = [
+        [$userId, follwingid]
     ];
     con.query(sql, [values], function (err, result) {
         if (err) {
@@ -292,39 +444,61 @@ app.get('/people/:personId', function name(req, res) {
         }
         else {
             // if theres no data or result returns as 0 cancel auth
-            if (result === "" || result === null || result.length === 0)
-                res.redirect("/");
-            else {
-                // console.log(result);
-                res.render("person", {
-                    UNAME: $userId,
-                    tweets: result
-                });
-            }
+            console.log(result);
+            res.redirect("/");
         }
     });
 });
 
-app.post('/searchPerson', function (req, res) {
-    res.redirect('/people/' + req.body.userName);
-});
-
-app.post('/followPerson', function (req, res) {
+app.get('/unfollow/:personId', function (req, res) {
+    if (!req.isAuthenticated())
+        return res.redirect('login');
     if (req.user.user_id) {
         $userId = req.user.user_id
     } else {
         //else look for the id in the req.session.passport.user
         $userId = req.session.passport.user
     }
-var follwingid = req.body.userName;
-    if(follwingid === $userId)
+    var follwingid = req.params.personId;
+    if (follwingid === $userId)
+        return res.redirect('/');
+    console.log("making feed of ", $userId);
+    var sql = "DELETE FROM FOLLOW  where follower = ? and following = ?";
+    var values = [
+        [$userId],
+        [follwingid]
+    ];
+    con.query(sql, values, function (err, result) {
+        if (err) {
+            console.log(err);
+            res.redirect("/");
+        }
+        else {
+            // if theres no data or result returns as 0 cancel auth
+            console.log(result);
+            res.redirect("/");
+        }
+    });
+});
+
+app.post('/followPerson', function (req, res) {
+    if (!req.isAuthenticated())
+        return res.redirect('login');
+    if (req.user.user_id) {
+        $userId = req.user.user_id
+    } else {
+        //else look for the id in the req.session.passport.user
+        $userId = req.session.passport.user
+    }
+    var follwingid = req.body.userName;
+    if (follwingid === $userId)
         return res.redirect('/');
     console.log("making feed of ", $userId);
     var sql = "INSERT INTO FOLLOW (follower, following) VALUES ?";
     var values = [
         [$userId, follwingid]
     ];
-con.query(sql, [values], function (err, result) {
+    con.query(sql, [values], function (err, result) {
         if (err) {
             console.log(err);
             res.redirect("/");
@@ -340,7 +514,7 @@ con.query(sql, [values], function (err, result) {
 app.get('/makeTweet', function (req, res) {
     if (req.isAuthenticated())
         res.render("makeTweet");
-    else res.redirect("login");
+    else res.redirect("/login");
 });
 
 app.post('/addTweet', function (req, res) {
@@ -358,10 +532,11 @@ app.post('/addTweet', function (req, res) {
         var values = [
             [tweet, $userId]
         ];
+        console.log(values);
         con.query(sql, [values], function (err, result) {
             if (err) {
                 console.log(err);
-                res.redirect("/makeTweet");
+                res.redirect("/");
             }
             else {
                 console.log("Number of records inserted: " + result.affectedRows);
@@ -369,12 +544,116 @@ app.post('/addTweet', function (req, res) {
             }
         });
     }
-    else res.redirect("login");
+    else res.redirect("/login");
+});
+
+app.get('/followers/:personId', function name(req, res) {
+    if (req.isAuthenticated()) {
+        console.log("Debug");
+        if (req.user.user_id) {
+            $userId = req.user.user_id
+        } else {
+            //else look for the id in the req.session.passport.user
+            $userId = req.session.passport.user
+        }
+        console.log($userId,req.params.personId);
+        if ($userId != req.params.personId)
+            return res.redirect('/');
+        var sql = "select * from USERS where USERNAME <> ? and USERNAME in (select FOLLOWER from FOLLOW where FOLLOWING = ?);";
+        var values = [
+            [$userId],
+            [$userId]
+        ];
+        con.query(sql, values, function (err, result) {
+            if (err) {
+                console.log(err);
+                res.redirect("/login");
+            }
+            else {
+                // if theres no data or result returns as 0 cancel auth
+                // console.log(result);
+                console.log(result);
+                res.render("people2", {
+                    people: result
+                });
+            }
+        });
+    }
+    else
+        res.redirect('/login');
+});
+
+
+app.get('/following/:personId', function name(req, res) {
+    if (req.isAuthenticated()) {
+        console.log("Debug");
+        if (req.user.user_id) {
+            $userId = req.user.user_id
+        } else {
+            //else look for the id in the req.session.passport.user
+            $userId = req.session.passport.user
+        }
+        console.log($userId,req.params.personId);
+        if ($userId != req.params.personId)
+            return res.redirect('/');
+        var sql = "select * from USERS where USERNAME <> ? and USERNAME in (select FOLLOWING from FOLLOW where FOLLOWER = ?);";
+        var values = [
+            [$userId],
+            [$userId]
+        ];
+        con.query(sql, values, function (err, result) {
+            if (err) {
+                console.log(err);
+                res.redirect("/login");
+            }
+            else {
+                // if theres no data or result returns as 0 cancel auth
+                // console.log(result);
+                console.log(result);
+                res.render("people2", {
+                    people: result
+                });
+            }
+        });
+    }
+    else {
+        console.log("Here");
+        res.redirect('/login');
+    }
 });
 
 app.get("/logout", (req, res, next) => {
-    req.logout();
+    if (req.isAuthenticated())
+        req.logout();
     res.redirect("/login");
+});
+
+app.get('/deleteProfile', function (req, res) {
+    if (!req.isAuthenticated())
+        return res.redirect('login');
+    if (req.user.user_id) {
+        $userId = req.user.user_id
+    } else {
+        //else look for the id in the req.session.passport.user
+        $userId = req.session.passport.user
+    }
+    if($userId == undefined)
+        return res.redirect('/');
+    var sql = "DELETE from USERS where USERNAME  = ?";
+    var values = [
+        [$userId]
+    ];
+    con.query(sql, values, function (err, result) {
+        if (err) {
+            console.log(err);
+            res.redirect("/logout");
+        }
+        else {
+            // if theres no data or result returns as 0 cancel auth
+            // console.log(result);
+            res.redirect("/logout");
+        }
+    });
 });
 
 app.listen(3000, function () {

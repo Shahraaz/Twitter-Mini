@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<title>Twitter Mini</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    html,
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        font-family: "Open Sans", sans-serif
+    }
+</style>
+
+<body class="w3-theme-l5">
+
+    <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+            <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2"
+                href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+            <a href="/" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i
+                    class="fa fa-home w3-margin-right"></i>Twitter Mini</a>
+            <a href="/people" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white"
+                title="Discover People"><i class="fa fa-globe"></i></a>
+            <a href="/logout" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white"
+                title="My Account">
+                <img src="" class="w3-circle" style="height:23px;width:23px" alt="logout">
+            </a>
+            <a href="/deleteProfile"
+                class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" title="My Account">
+                <img src="" class="w3-circle" style="height:23px;width:23px" alt="Delete Profile">
+            </a>
+        </div>
+    </div>
+
+    <!-- Page Container -->
+    <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">
+        <!-- The Grid -->
+        <div class="w3-row">
+            <!-- Left Column -->
+            <div class="w3-col m3">
+                <!-- Profile -->
+                <div class="w3-card w3-round w3-white">
+                    <div class="w3-container">
+                        <a class="w3-center card-subtitle text-muted" href="/people/<%=userId%>">
+                            <%=userId%></a>
+                        <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i><%=bio%></p>
+                        <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i><%=Gender%></p>
+                    </div>
+                </div>
+                <br>
+
+                <!-- Accordion -->
+                <div class="w3-card w3-round">
+                    <div class="w3-white">
+                        <a class="w3-button w3-block w3-theme-l1 w3-left-align"
+                            href="/followers/<%=userId%>">Followers</a>
+                        <a class="w3-button w3-block w3-theme-l1 w3-left-align"
+                            href="/following/<%=userId%>">Following</a>
+                    </div>
+                </div>
+                <br>
+            </div>
+
+            <!-- Middle Column -->
+            <div class="w3-col m7">
+
+                <div class="w3-row-padding">
+                    <div class="w3-col m12">
+                        <div class="w3-card w3-round w3-white">
+                            <div class="w3-container w3-padding">
+                                <h6 class="w3-opacity">Tweet</h6>
+                                <form class="form-horizontal" action='/addTweet' method="POST">
+                                    <div class="form-group">
+                                        <textarea name="tweet" rows="4" cols="50"></textarea>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary" id="submit">Proceed</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <%for(var  i=0;i<tweets.length;++i){%>
+                <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+                    <a href="people/<%=tweets[i].userName%>"><%=tweets[i].userName%></a>
+                    <br>
+                    <hr class="w3-clear">
+                    <p><%=tweets[i].TweetContent%></p>
+                </div>
+                <%}%>
+                
+
+                <!-- End Middle Column -->
+            </div>
+
+            <!-- Right Column -->
+                <!-- End Right Column -->
+            </div>
+
+            <!-- End Grid -->
+        </div>
+
+        <!-- End Page Container -->
+    </div>
+    <br>
+
+    <!-- Footer -->
+
+    <script>
+        // Accordion
+        function myFunction(id) {
+            var x = document.getElementById(id);
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+                x.previousElementSibling.className += " w3-theme-d1";
+            } else {
+                x.className = x.className.replace("w3-show", "");
+                x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-theme-d1", "");
+            }
+        }
+
+        // Used to toggle the menu on smaller screens when clicking on the menu button
+        function openNav() {
+            var x = document.getElementById("navDemo");
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+            }
+        }
+    </script>
+
+</body>
+
+</html>

