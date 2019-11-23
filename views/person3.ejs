@@ -70,14 +70,17 @@
     <div class="w3-col m7">
 
         <%for(var  i=0;i<tweets.length;++i){%>
-        <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-            <a href="people/<%=tweets[i].userName%>"><%=tweets[i].userName%></a>
-            <br>
-            <hr class="w3-clear">
-            <p><%=tweets[i].TweetContent%></p>
-        </div>
-        <%}%>
-                
+            <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+                <a href="people/<%=tweets[i].Username2%>"><%=tweets[i].Username2%></a>
+                <br>
+                <a href="people/<%=tweets[i].username%>">Original <%=tweets[i].username%></a>
+                <br>
+                <hr class="w3-clear">
+                <p><%=tweets[i].TweetContent%></p>
+                <br>
+                <a href="/retweet/<%=tweets[i].TWEETID%>">retweet</a>
+            </div>
+            <%}%>                
 
                 <!-- End Middle Column -->
             </div>

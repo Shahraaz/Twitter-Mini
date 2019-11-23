@@ -31,12 +31,12 @@ const mysql = require('mysql');
 var con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'hellopc12',
+    password: 'mynewpassword',
     database: 'Twitter'
 });
 
 con.connect(function (err) {
-    if (err) throw err;
+    if (err) console.log(err);
     console.log("Connected!");
 });
 
@@ -128,7 +128,7 @@ app.get('/', function (req, res) {
             $userId = req.session.passport.user
         }
         console.log("making feed of ", $userId);
-        var sql = "SELECT userName, TweetContent FROM TWEET, FOLLOW WHERE follower = ? and following = userName order by tweetTime desc";
+        var sql = "SELECT TWEETS.TWEETID, TWEETS.userName as Username2,TWEETCONTENTS.userName, TweetContent FROM TWEETCONTENTS, FOLLOW,TWEETS WHERE follower = ? and following = TWEETS.userName AND TWEETS.TWEETID = TWEETCONTENTS.TWEETID order by TIMESTAMP_R desc";
         var values = [
             [$userId]
         ];
@@ -138,19 +138,21 @@ app.get('/', function (req, res) {
                 res.redirect("/login");
             }
             else {
+                console.log(result);
+                // console.log("result[0]"+result[0]);
                 // if theres no data or result returns as 0 cancel auth4
                 var sql = "SELECT USERNAME, NAME, GENDER, BIO FROM USERS WHERE userName = ?";
                 var values = [
                     [$userId]
                 ];
-                console.log(result);
+                // console.log(result);
                 con.query(sql, [values], function (err, result2) {
                     if (err) {
                         console.log(err);
                         res.redirect("/login");
                     }
                     else {
-                        console.log(result2);
+                        console.log("result2" + result2);
 
                         res.render("home2", {
                             userId: result2[0].USERNAME,
@@ -160,6 +162,7 @@ app.get('/', function (req, res) {
                         });
                     }
                 });
+                // res.redirect('/');
             }
         });
     }
@@ -198,7 +201,7 @@ app.post('/addUser', function (req, res) {
             if (result === null || result === undefined || result.length == 0) {
                 var sql = "INSERT INTO USERS VALUES ?";
                 var values = [
-                    [userName, name, Gender, bio, 0, 0]
+                    [userName, name, Gender, bio]
                 ];
                 con.query(sql, [values], function (err, result) {
                     if (err) {
@@ -314,7 +317,7 @@ app.get('/people/:personId', function name(req, res) {
     console.log("Debug Startr");
     $userId = req.params.personId;
     console.log("making feed of ", $userId);
-    var sql = "SELECT userName, TweetContent FROM TWEET WHERE USERNAME = ? order by tweetTime desc";
+    var sql = "SELECT TWEETS.TWEETID ,TWEETS.USERNAME as Username2, TWEETCONTENTS.USERNAME as username, TweetContent FROM TWEETCONTENTS,TWEETS WHERE TWEETS.TWEETID = TWEETCONTENTS.TWEETID AND TWEETS.USERNAME = ? order by TIMESTAMP_R desc";
     var values = [
         [$userId]
     ];
@@ -324,7 +327,7 @@ app.get('/people/:personId', function name(req, res) {
             res.redirect("/");
         }
         else {
-            console.log("people/acc" + result);
+            console.log(result);
 
             // if theres no data or result returns as 0 cancel auth
             if (result === "" || result === null)
@@ -528,10 +531,11 @@ app.post('/addTweet', function (req, res) {
             $userId = req.session.passport.user
         }
         console.log($userId, "userId");
-        var sql = "INSERT INTO TWEET (tweetContent, userName) VALUES ?";
+        var sql = "INSERT INTO TWEETCONTENTS (tweetContent, userName) VALUES ?";
         var values = [
             [tweet, $userId]
         ];
+
         console.log(values);
         con.query(sql, [values], function (err, result) {
             if (err) {
@@ -540,9 +544,31 @@ app.post('/addTweet', function (req, res) {
             }
             else {
                 console.log("Number of records inserted: " + result.affectedRows);
-                res.redirect("/");
+                console.log(result);
+
+                var sql = "INSERT INTO TWEETS (TWEETID, USERNAME) VALUES ?";
+                var values = [
+                    [result.insertId, $userId]
+                ];
+
+                console.log(values);
+                con.query(sql, [values], function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        res.redirect("/");
+                    }
+                    else {
+                        console.log("Number of records inserted: " + result.affectedRows);
+                        res.redirect("/");
+                    }
+                });
+
+
+
+
             }
         });
+
     }
     else res.redirect("/login");
 });
@@ -556,7 +582,7 @@ app.get('/followers/:personId', function name(req, res) {
             //else look for the id in the req.session.passport.user
             $userId = req.session.passport.user
         }
-        console.log($userId,req.params.personId);
+        console.log($userId, req.params.personId);
         if ($userId != req.params.personId)
             return res.redirect('/');
         var sql = "select * from USERS where USERNAME <> ? and USERNAME in (select FOLLOWER from FOLLOW where FOLLOWING = ?);";
@@ -593,7 +619,7 @@ app.get('/following/:personId', function name(req, res) {
             //else look for the id in the req.session.passport.user
             $userId = req.session.passport.user
         }
-        console.log($userId,req.params.personId);
+        console.log($userId, req.params.personId);
         if ($userId != req.params.personId)
             return res.redirect('/');
         var sql = "select * from USERS where USERNAME <> ? and USERNAME in (select FOLLOWING from FOLLOW where FOLLOWER = ?);";
@@ -622,6 +648,40 @@ app.get('/following/:personId', function name(req, res) {
     }
 });
 
+app.get('/retweet/:tweetid', function name(req, res) {
+    if (req.isAuthenticated()) {
+        console.log("Debug");
+        if (req.user.user_id) {
+            $userId = req.user.user_id
+        } else {
+            //else look for the id in the req.session.passport.user
+            $userId = req.session.passport.user
+        }
+        console.log($userId, req.params.tweetid);
+        var sql = "INSERT INTO TWEETS (TWEETID, USERNAME) VALUES ?";
+        var values = [
+            [req.params.tweetid, $userId]
+        ];
+        console.log(values);
+        con.query(sql, [values], function (err, result) {
+            if (err) {
+                console.log(err);
+                res.redirect("/");
+            }
+            else {
+                // if theres no data or result returns as 0 cancel auth
+                console.log(result);
+                res.redirect("/");
+            }
+        });
+    }
+    else {
+        console.log("Here");
+        res.redirect('/login');
+    }
+});
+
+
 app.get("/logout", (req, res, next) => {
     if (req.isAuthenticated())
         req.logout();
@@ -637,7 +697,7 @@ app.get('/deleteProfile', function (req, res) {
         //else look for the id in the req.session.passport.user
         $userId = req.session.passport.user
     }
-    if($userId == undefined)
+    if ($userId == undefined)
         return res.redirect('/');
     var sql = "DELETE from USERS where USERNAME  = ?";
     var values = [
