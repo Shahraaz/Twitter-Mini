@@ -31,7 +31,7 @@ const mysql = require('mysql');
 var con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: 'mynewpassword',
     database: 'Twitter'
 });
 
@@ -483,6 +483,76 @@ app.get('/unfollow/:personId', function (req, res) {
         }
     });
 });
+
+//adding starts
+app.get('/deleteTweet/:personId/:orgusr/:TweetID', function (req, res) {
+    if (!req.isAuthenticated())
+        return res.redirect('login');
+    if (req.user.user_id) {
+        $userId = req.user.user_id
+    } else {
+        //else look for the id in the req.session.passport.user
+        $userId = req.session.passport.user
+    }
+    /*
+    if $user id != personid
+        redirect home
+    if personid == orgid
+        tweet content delete
+    else
+        tweets me se userid,tweetid
+    */
+    var currid = req.params.personId;
+    var orgid = req.params.orgusr;
+    var tweetid = req.params.TweetID;
+    console.log(currid, orgid, tweetid);
+    // return res.redirect('/');
+
+    if (currid != $userId)
+        return res.redirect('/');
+
+    if (currid === orgid) {
+        var sql = "DELETE FROM TWEETCONTENTS  where  TWEETID = ? ";
+        var values = [
+            [tweetid]
+        ];
+        con.query(sql, values, function (err, result) {
+            if (err) {
+                console.log(err);
+                res.redirect("/");
+            }
+            else {
+                // if theres no data or result returns as 0 cancel auth
+                console.log(result);
+                res.redirect("/");
+            }
+        });
+    } else {
+        var sql = "DELETE FROM TWEETS  where  USERNAME = ? AND TWEETID = ? ";
+        var values = [
+            [currid],
+            [tweetid]
+        ];
+        con.query(sql, values, function (err, result) {
+            if (err) {
+                console.log(err);
+                res.redirect("/");
+            }
+            else {
+                // if theres no data or result returns as 0 cancel auth
+                console.log(result);
+                res.redirect("/");
+            }
+        });
+    }
+
+});
+
+
+//end add
+
+
+
 
 app.post('/followPerson', function (req, res) {
     if (!req.isAuthenticated())

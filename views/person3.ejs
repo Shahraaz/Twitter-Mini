@@ -35,15 +35,15 @@
                 <img src="" class="w3-circle" style="height:23px;width:23px" alt="logout">
             </a>
             <%if(choice === 1){%>
-                <a href="/follow/<%=USERID%>" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white"
-                    title="My Account">
-                    <img src="" class="w3-circle" style="height:23px;width:23px" alt="Follow">
-                </a>
-                <%} else if(choice === 2){%>
-                <a href="/unfollow/<%=USERID%>" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white"
-                        title="My Account">
-                        <img src="" class="w3-circle" style="height:23px;width:23px" alt="Unfollow">
-                    </a>
+            <a href="/follow/<%=USERID%>"
+                class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" title="My Account">
+                <img src="" class="w3-circle" style="height:23px;width:23px" alt="Follow">
+            </a>
+            <%} else if(choice === 2){%>
+            <a href="/unfollow/<%=USERID%>"
+                class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" title="My Account">
+                <img src="" class="w3-circle" style="height:23px;width:23px" alt="Unfollow">
+            </a>
             <%}%>
     
         </div>
@@ -58,10 +58,10 @@
                 <!-- Profile -->
                 <div class="w3-card w3-round w3-white">
                     <div class="w3-container">
-                        <a class="w3-center card-subtitle text-muted" href="/people/<%=UNAME%>"><%=UNAME%> </a> <p><i
-                    class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i><%=FNAME%></p>
-                <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i><%=BIO%></p>
-                <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i><%=GENDER%></p>
+                        <a class="w3-center card-subtitle text-muted" href="/people/<%=UNAME%>"><%=UNAME%> </a>
+            <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i><%=FNAME%></p>
+            <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i><%=BIO%></p>
+            <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i><%=GENDER%></p>
         </div>
     </div>
     </div>
@@ -70,29 +70,33 @@
     <div class="w3-col m7">
 
         <%for(var  i=0;i<tweets.length;++i){%>
-            <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-                <a href="people/<%=tweets[i].Username2%>"><%=tweets[i].Username2%></a>
+        <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+            <a href="people/<%=tweets[i].Username2%>"><%=tweets[i].Username2%></a>
+            <br>
+            <a href="people/<%=tweets[i].username%>">Original <%=tweets[i].username%></a>
+            <br>
+            <hr class="w3-clear">
+            <p><%=tweets[i].TweetContent%></p>
+            <br>
+            <a href="/retweet/<%=tweets[i].TWEETID%>">retweet</a>
+            <% if(choice != 1 && choice != 2){%>
                 <br>
-                <a href="people/<%=tweets[i].username%>">Original <%=tweets[i].username%></a>
-                <br>
-                <hr class="w3-clear">
-                <p><%=tweets[i].TweetContent%></p>
-                <br>
-                <a href="/retweet/<%=tweets[i].TWEETID%>">retweet</a>
-            </div>
+                <a href="/deleteTweet/<%=tweets[i].Username2%>/<%=tweets[i].username%>/<%=tweets[i].TWEETID%>">delete Tweet</a>
             <%}%>                
+                </div>
+            <%}%>
 
-                <!-- End Middle Column -->
-            </div>
-
-            <!-- Right Column -->
-                <!-- End Right Column -->
-            </div>
-
-            <!-- End Grid -->
+            <!-- End Middle Column -->
         </div>
 
-        <!-- End Page Container -->
+        <!-- Right Column -->
+        <!-- End Right Column -->
+    </div>
+
+    <!-- End Grid -->
+    </div>
+
+    <!-- End Page Container -->
     </div>
     <br>
 
